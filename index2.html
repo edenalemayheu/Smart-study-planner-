@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Study Planner</title>
+    <style>
+        /* basic page style */
+        body {
+            font-family: Arial;
+            background: #f0f0f0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: green;
+        }
+
+        .box {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px #aaa;
+        }
+
+        input,
+        select,
+        button {
+            padding: 6px;
+            margin: 5px 0;
+        }
+
+        .task {
+            display: flex;
+            justify-content: space-between;
+            background: #eee;
+            margin: 5px 0;
+            padding: 6px;
+            border-radius: 4px;
+        }
+
+        .done {
+            background: green;
+            color: white;
+            border: none;
+            margin-right: 5px;
+        }
+
+        .del {
+            background: red;
+            color: white;
+            border: none;
+        }
+
+        .info {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Smart Study Planner</h1>
+    <div class="box">
+        <!-- type your task -->
+        <input type="text" id="taskBox" placeholder="Enter task...">
+        <!-- choose subject -->
+        <select id="subjectBox">
+            <option value="Math">Math</option>
+            <option value="English">English</option>
+            <option value="Science">Science</option>
+        </select>
+        <!-- add button -->
+        <button onclick="addTask()">Add</button>
+
+        <!-- tasks will show here -->
+        <div id="list"></div>
+
+        <!-- info about counts -->
+        <div class="info">
+            Total: <span id="total">0</span> | Done: <span id="done">0</span>
+        </div>
+    </div>
+
+    <script>
+        // easy counters
+        let total = 0;
+        let done = 0;
+
+        // add new task
+        function addTask() {
+            let text = document.getElementById("taskBox").value;
+            let subject = document.getElementById("subjectBox").value;
+            let list = document.getElementById("list");
+
+            // if empty input
+            if (text === "") {
+                alert("Please enter a task!");
+                return;
+            }
+
+            // increase total
+            total++;
+            document.getElementById("total").innerHTML = total;
+
+            // make task line
+            let line = document.createElement("div");
+            line.className = "task";
+
+            // task text
+            let label = document.createElement("span");
+            label.innerHTML = "[" + subject + "] " + text;
+
+            // done button
+            let doneBtn = document.createElement("button");
+            doneBtn.innerHTML = "Done";
+            doneBtn.className = "done";
+            doneBtn.onclick = function () {
+                label.style.textDecoration = "line-through";
+                done++;
+                document.getElementById("done").innerHTML = done;
+            };
+
+            // delete button
+            let delBtn = document.createElement("button");
+            delBtn.innerHTML = "Del";
+            delBtn.className = "del";
+            delBtn.onclick = function () {
+                list.removeChild(line);
+                total--;
+                document.getElementById("total").innerHTML = total;
+                if (label.style.textDecoration === "line-through") {
+                    done--;
+                    document.getElementById("done").innerHTML = done;
+                }
+            };
+
+            // put together
+            line.appendChild(label);
+            line.appendChild(doneBtn);
+            line.appendChild(delBtn);
+            list.appendChild(line);
+
+            // clear input
+            document.getElementById("taskBox").value = "";
+        }
+    </script>
+</body>
+
+</html>
